@@ -129,6 +129,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/intlTelInput.min.js"></script>
     <script>
+      function removeRedundantCountryCode (number) {
+        const split = number.split('+');
+        
+        if (split.length === 2) {
+          if (split[1].startsWith(split[0])) {
+            return `+${split[1]}`;
+          }
+        }
+
+        return number;
+      }
+
       var intlNumber;
       $("#numberInput").intlTelInput({
         initialCountry: "auto",
@@ -147,6 +159,7 @@
       $("#numberInput").on("keyup change", function() {
         intlNumber = $("#numberInput").intlTelInput("getNumber");
         if (intlNumber) {
+          intlNumber = removeRedundantCountryCode(intlNumber);
           $("#hint").text(intlNumber);
         } else {
           intlNumber = null;
